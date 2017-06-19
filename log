@@ -1,0 +1,8 @@
+日志：
+第一次实战
+1，创建了导航栏
+2，创建了共用css文件
+3，创建了自己的插件（jtthink/global.js）
+插件里面放公共函数库（jtthink/functions.js）
+4，创建API配置库(config/APIConfig.js)
+
