@@ -13,6 +13,13 @@ export default
            state[key]=data;
        }
     },
+    getters:{
+        navForVedioClass: state => {
+            return state.NavBar.filter(function (item) {
+                return item.nav_text!='首页';
+            })
+        }
+    },
     actions:{
         loadData(context,{url,key}){
             Vue.http.get(url).then((rs)=>{
