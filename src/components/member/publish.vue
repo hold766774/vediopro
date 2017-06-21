@@ -1,8 +1,25 @@
 <template>
     <div>
+
+        <el-dialog
+                title="图片预览"
+                v-model="showVPic"
+                size="small"
+             >
+            <span>
+                <img :src="vedio.v_pic.url" alt="">
+            </span>
+            <span slot="footer" class="dialog-footer">
+
+    <el-button type="primary" @click="showVPic = false">关 闭</el-button>
+  </span>
+        </el-dialog>
+
+
         <el-row>
             <el-col :span="12">
                 <h3>视频基本信息</h3>
+
                 <el-form :model="vedio" ref="ruleForm" label-width="100px" class="demo-ruleForm">
                     <el-form-item label="视频标题" prop="v_title">
                         <el-input v-model="vedio.v_title" placeholder="填写视频标题"></el-input>
@@ -18,6 +35,23 @@
                             </el-option>
                         </el-select>
                     </el-form-item>
+
+                    <el-form-item label="视频封面" prop="v_pic">
+                        <el-button type="text" @click="showVPic=true">图片预览</el-button>
+                        <el-upload
+                                class="upload-demo"
+                                drag
+                                action="http://localhost:9090/vedio/uploadpic"
+                                name="Uploader[file]"
+                                :on-success="handleSuccess"
+
+                        >
+                            <i class="el-icon-upload"></i>
+                            <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                            <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+                        </el-upload>
+                    </el-form-item>
+
                 </el-form>
             </el-col>
             <el-col :span="12"></el-col>
@@ -34,11 +68,38 @@
     export default {
       data(){
           return {
+              showVPic:false,
               vedio:{
                   v_title:'',
-                  v_class:'健身'
+                  v_class:'健身',
+                  v_pic:{
+                      name:"",
+                      url:""
+                  }
               }
           };
+      },
+      methods:{
+          handleSuccess(file){
+              //响应成功
+             // console.log(file);
+              if(file.status==1){
+                  this.vedio.v_pic.name=file.name;
+                  this.vedio.v_pic.url=file.url;
+              }else{
+                  alert("上传失败，请稍后再试");
+              }
+
+          },
+          handlePreview(file){
+              //预览图片
+              this.showVPic=true;
+          },
+          handleRemove(file){
+              //移除图片
+              this.vedio.v_pic.name='';
+              this.vedio.v_pic.url='';
+          }
       }
     }
 </script>
