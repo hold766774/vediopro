@@ -60,6 +60,9 @@
                         <div id="vedioContainer">
                             <el-button id="selecteVedio" type="primary">选择视频<i class="el-icon-upload el-icon--right"></i></el-button>
                         </div>
+                        <div class="vedio-progress" v-if="showProgress">
+                            <el-progress :text-inside="true" :stroke-width="16" :percentage="vedioProgressValue"></el-progress>
+                        </div>
 
 
                     </el-form-item>
@@ -77,12 +80,14 @@
 </template>
 <style>
     h3{color: dimgray;margin-bottom: 10px;}
+    .vedio-progress{margin-top: 5px;}
 </style>
 
 <script>
     import InputTag from 'vue-input-tag'
     export default {
         mounted(){
+            var myVue=this;
             var uploader = Qiniu.uploader({
                 runtimes: 'html5,flash,html4',      // 上传模式，依次退化
                 browse_button: 'selecteVedio',         // 上传选择的点选按钮，必需
@@ -140,9 +145,12 @@
                     },
                     'BeforeUpload': function(up, file) {
                         // 每个文件上传前，处理相关的事情
+
                     },
                     'UploadProgress': function(up, file) {
                         // 每个文件上传时，处理相关的事情
+                        myVue. showProgress=true;
+                        myVue.vedioProgressValue=file.percent;
                     },
                     'FileUploaded': function(up, file, info) {
                         // 每个文件上传成功后，处理相关的事情
@@ -155,6 +163,7 @@
                         // var domain = up.getOption('domain');
                         // var res = parseJSON(info);
                         // var sourceLink = domain +"/"+ res.key; 获取上传成功后的文件的Url
+                        myVue. showProgress=false;
                     },
                     'Error': function(up, err, errTip) {
                         //上传出错时，处理相关的事情
@@ -185,7 +194,9 @@
                       id:0
                   },
                   v_tags:[]
-              }
+              },
+              vedioProgressValue:0,
+              showProgress:false
           };
       },
         components: {
