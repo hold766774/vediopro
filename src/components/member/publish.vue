@@ -51,7 +51,16 @@
                             <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
                         </el-upload>
                     </el-form-item>
+                    <el-form-item label="标签" >
 
+                            <input-tag  :tags="vedio.v_tags"></input-tag>
+
+                    </el-form-item>
+                    <el-form-item label="测试" >
+
+                    <el-button type="button" @click="testBtn">测试按钮</el-button>
+
+                    </el-form-item>
                 </el-form>
             </el-col>
             <el-col :span="12"></el-col>
@@ -64,7 +73,7 @@
 </style>
 
 <script>
-
+    import InputTag from 'vue-input-tag'
     export default {
       data(){
           return {
@@ -74,18 +83,27 @@
                   v_class:'健身',
                   v_pic:{
                       name:"",
-                      url:""
-                  }
+                      url:"",
+                      id:0
+                  },
+                  v_tags:[]
               }
           };
       },
+        components: {
+            "input-tag":InputTag
+        },
       methods:{
+          testBtn(){
+              alert(this.vedio.v_tags);
+          },
           handleSuccess(file){
               //响应成功
              // console.log(file);
               if(file.status==1){
                   this.vedio.v_pic.name=file.name;
                   this.vedio.v_pic.url=file.url;
+                  this.vedio.v_pic.url=file.id;
               }else{
                   alert("上传失败，请稍后再试");
               }

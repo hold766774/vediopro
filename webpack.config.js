@@ -24,7 +24,7 @@ module.exports =
     module:{
         loaders:[
             {test:/\.js$/,loader:"babel-loader",query:{compact:true},exclude: /node_modules/},
-            {test:/\.vue$/,loader:"babel-loader!vue-loader", exclude: /node_modules/},
+            {test:/\.vue$/,loader:"babel-loader!vue-loader"},
             {test:/\.(eot|woff|woff2|svg|ttf)([\?]?.*)$/,loader:"file-loader" },
             {
                 test: /\.css$/,
