@@ -57,11 +57,14 @@
 
                     </el-form-item>
                     <el-form-item label="上传视频" >
-                        <div id="vedioContainer">
+                        <div id="vedioContainer" v-if="!showProgress">
                             <el-button id="selecteVedio" type="primary">选择视频<i class="el-icon-upload el-icon--right"></i></el-button>
+
                         </div>
+
                         <div class="vedio-progress" v-if="showProgress">
                             <el-progress :text-inside="true" :stroke-width="16" :percentage="vedioProgressValue"></el-progress>
+                            <img :src="options.iconsrc" class="myicon" @click="pauseUpload" style="margin-top:2px;"/>
                         </div>
 
 
@@ -81,6 +84,7 @@
 <style>
     h3{color: dimgray;margin-bottom: 10px;}
     .vedio-progress{margin-top: 5px;}
+    .myicon{width: 20px;cursor: pointer;}
 </style>
 
 <script>
@@ -88,7 +92,7 @@
     export default {
         mounted(){
             var myVue=this;
-            var uploader = Qiniu.uploader({
+             this.uploader = Qiniu.uploader({
                 runtimes: 'html5,flash,html4',      // 上传模式，依次退化
                 browse_button: 'selecteVedio',         // 上传选择的点选按钮，必需
                 // 在初始化时，uptoken，uptoken_url，uptoken_func三个参数中必须有一个被设置
@@ -184,6 +188,7 @@
         ,
       data(){
           return {
+              uploader:null,
               showVPic:false,
               vedio:{
                   v_title:'',
@@ -196,7 +201,12 @@
                   v_tags:[]
               },
               vedioProgressValue:0,
-              showProgress:false
+              showProgress:false,
+              options:{
+                  iconsrc:"/icons/pause.png",
+                  iconpause:"/icons/pause.png",
+                  iconstart:"/icons/start.png",
+              },
           };
       },
         components: {
@@ -226,7 +236,18 @@
               //移除图片
               this.vedio.v_pic.name='';
               this.vedio.v_pic.url='';
+          },
+          pauseUpload(){
+              if(this.options.iconsrc==this.options.iconpause){
+                  this.uploader.stop();
+                  this.options.iconsrc=this.options.iconstart;//暂停
+              } else{
+                  this. uploader.start();
+
+                  this.options.iconsrc=this.options.iconpause;//播放
+              }
           }
-      }
+      },
+
     }
 </script>
